@@ -32,7 +32,7 @@ Server run on port 5000
 | GET           | /uptime       | uptime JSON |
 | GET           | /disks        | disks usage JSON |
 | GET           | /processes    | processes info JSON |
-| POST          | /uptime/<pid> | Kill process with pid (WINDOWS ONLY for now)|
+| POST          | /processes/<pid> | Kill process with pid (WINDOWS ONLY for now)|
 
 
 
