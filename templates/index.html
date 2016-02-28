@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/site.min.css')}}">
+    <script src="{{url_for('static', filename='js/jquery-1.12.0.min.js')}}" type="text/javascript"></script>
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}" type="text/javascript"></script>
+    <script src="{{url_for('static', filename='js/respond.min.js')}}" type="text/javascript"></script>
+    <script src="{{url_for('static', filename='js/angular.min.js')}}" type="text/javascript"></script>
+
+</head>
+<body>
+<div class="container">
+    <div class="example">
+        <nav class="navbar navbar-inverse" role="navigation">
+                  <div class="container-fluid">
+                    <div class="navbar-header">
+                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-6">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                      </button>
+                      <a class="navbar-brand" href="#">Bootflat</a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+                      <p class="navbar-text">Signed in as Mark Otto</p>
+                    </div>
+                  </div>
+                </nav>
+</div>
+            {% raw %}
+
+        <div class="row" ng-controller="myCtrl" >
+
+        <div ng-repeat="cpu in cpus">
+
+
+            <div class="col-sm-6 col-md-3">
+              <div class="thumbnail">
+
+                <div class="caption text-center">
+                  <h3>CPU</h3>
+                  <p>{{cpu.cpu}}</p>
+                  <p><a href="#" class="btn btn-warning" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                </div>
+              </div>
+            </div>
+
+
+        </div>
+            </div>
+{% endraw %}
+
+
+
+<h2>Memory:</h2>
+<p>
+{% raw %}
+    <div ng-controller="memCtrl">
+   <table>
+       <thead>
+       <tr>
+       <th>Total</th>
+       <th>Used</th>
+       <th>Available</th>
+       <th>Percent used</th>
+       </tr>
+       </thead>
+       <tr>
+       <tr>
+       <td>{{memory.total}} </td>
+       <td>{{memory.used}} </td>
+       <td>{{memory.available}} </td>
+       <td>{{memory.percent}} %</td>
+       </tr>
+       </tbody>
+   </table>
+
+{% endraw %}
+</div>
+</p>
+
+<h2>DISKS:</h2>
+<p>
+{% raw %}
+    <div ng-controller="diskCtrl">
+   <table>
+       <thead>
+       <tr>
+       <th>Device</th>
+       <th>Mountpoint</th>
+       <th>FS Type</th>
+       <th>Total</th>
+           <th>Free</th>
+           <th>Used</th>
+           <th>Used Percent</th>
+       </tr>
+       </thead>
+       <tbody ng-repeat="disk in disks">
+       <tr>
+           <td>{{disk.device}}</td>
+           <td>{{disk.mountpoint}}</td>
+           <td>{{disk.fstype}}</td>
+       <td>{{disk.usage.total}} </td>
+       <td>{{disk.usage.free}} </td>
+       <td>{{disk.usage.used}} </td>
+       <td>{{disk.usage.usage_percent}} %</td>
+       </tr>
+       </tbody>
+   </table>
+
+{% endraw %}
+</div>
+</p>
+</div>
+    </div>
+    <script type="text/javascript" src="{{url_for('static', filename='js/app.js')}}" ></script>
+</body>
+</html>

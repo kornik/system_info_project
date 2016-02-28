@@ -1,0 +1,142 @@
+doctype html
+html(lang='en', ng-app='myApp')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    title Dashboard - Dark Admin
+    link(rel='stylesheet', href=url_for('static', filename='css/bootstrap.min.css'))
+    link(rel='stylesheet', href=url_for('static', filename='css/angular-chart.min.css'))
+    script(src=url_for('static', filename='js/jquery-1.10.2.min.js'), type='text/javascript')
+    script(src=url_for('static', filename='js/bootstrap.min.js'), type='text/javascript')
+    script(src=url_for('static', filename='js/Chart.min.js'), type='text/javascript')
+    script(src=url_for('static', filename='js/angular.min.js'), type='text/javascript')
+    script(src=url_for('static', filename='js/angular-chart.min.js'), type='text/javascript')
+    script(src=url_for('static', filename='js/dirPagination.js'), type='text/javascript')
+    link(rel='stylesheet', type='text/css', href=url_for('static', filename='css/local.css'))
+
+
+  body
+    #wrapper
+      nav.navbar.navbar-inverse.navbar-fixed-top(role='navigation')
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-ex1-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='index.html') Admin Panel
+        .collapse.navbar-collapse.navbar-ex1-collapse
+          ul#active.nav.navbar-nav.side-nav
+            li.selected
+              a(href='index.html')
+                i.fa.fa-bullseye
+                |  Dashboard
+
+      #page-wrapper
+        .row
+          .col-lg-4
+            .panel.panel-primary
+              .panel-heading
+                h3.panel-title
+                  i.fa.fa-magnet
+                  | UPTIME
+              .panel-body(ng-controller='uptimeCtrl')
+                | {% raw %}
+                h4 Uptime: {{uptime.uptime}}
+                | {% endraw %}		
+
+          .col-lg-4
+            .panel.panel-primary
+              .panel-heading
+                h3.panel-title
+                  i.fa.fa-magnet
+                  | CPU USAGE
+              .panel-body(ng-controller="testCtrl")
+                  canvas#bar.chart.chart-bar(chart-data='data', chart-labels='labels', chart-legend='true', chart-series='series')
+
+
+          .row
+            .col-lg-4
+              .panel.panel-primary
+                .panel-heading
+                  h3.panel-title
+                    i.fa.fa-magnet
+                    | MEMORY USAGE
+                .panel-body(ng-controller='memCtrl')
+                  | {% raw %}
+                  ul.server-stats
+                    li
+                      .key.pull-right Memory
+                      .stat
+                        .info {{memory.percent}}% / {{memory.used}} / ({{memory.total}})
+                        .progress.progress-small
+                          .progress-bar(style='width: {{memory.percent}}%;', class='progress-bar-{{selectcss(memory.percent)}}')
+                  | 							{% endraw %}
+            .col-lg-4
+              .panel.panel-primary
+                .panel-heading
+                  h3.panel-title
+                    i.fa.fa-magnet
+                    | DISKS USAGE
+                .panel-body(ng-controller='diskCtrl')
+                  | {% raw %}
+                  ul.server-stats(ng-repeat='disk in disks')
+                    li
+                      .key.pull-right {{disk.mountpoint}} ({{disk.fstype}})
+                      .stat
+                        .info {{disk.usage.usage_percent}}% / {{disk.usage.used}} / ({{disk.usage.total}})
+                        .progress.progress-small
+                          .progress-bar(style='width: {{disk.usage.usage_percent}}%;', class='progress-bar-{{selectcss(disk.usage.usage_percent)}}')
+                  | 							{% endraw %}
+          #info.alert.alert-dismissable.alert-success.hidden
+            button.close(data-dismiss='alert', type='button') ×
+            |                         Success! Process killed.
+          .row(ng-controller='procCtrl')
+            .col-lg-12
+              .panel.panel-primary
+                .panel-heading
+                  h3.panel-title
+                    i.fa.fa-bar-chart-o
+                    |  Running processes
+                .panel-body
+                  form.form-inline
+                    .form-group
+                      label Search
+                      input#search.form-control(type='text', ng-model='search', placeholder='Search')
+                  table.table.table-bordered
+                    thead
+                      tr
+                        th(ng-click="sort('pid')")
+                          span.glyphicon.sort-icon(ng-show="sortKey=='pid'", ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}")
+                          |                                 PID
+                        th(ng-click="sort('name')")
+                          span.glyphicon.sort-icon(ng-show="sortKey=='name'", ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}")
+                          | Name
+                        th(ng-click="sort('memory_usage')")
+                          span.glyphicon.sort-icon(ng-show="sortKey=='memory_usage'", ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}")
+                          | Memory Usage
+                        th(ng-click="sort('cpu_usage')")
+                          span.glyphicon.sort-icon(ng-show="sortKey=='cpu_usage'", ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}")
+                          | CPU Usage
+                        th(ng-click="sort('start_date')")
+                          span.glyphicon.sort-icon(ng-show="sortKey=='start_date'", ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}")
+                          | Start Date
+                        th(ng-click="sort('status')")
+                          span.glyphicon.sort-icon(ng-show="sortKey=='status'", ng-class="{'glyphicon-chevron-up':reverse,'glyphicon-chevron-down':!reverse}")
+                          | Status
+                    tbody
+                      | {% raw %}
+                      tr(dir-paginate='proc in processes | orderBy:sortKey:reverse |filter:search| itemsPerPage:10')
+                        td {{proc.pid}}
+                        td {{proc.name}}
+                        td {{proc.memory_usage}} %
+                        td {{proc.cpu_usage}} %
+                        td {{proc.start_date}}
+                        td {{proc.status}}
+                        td
+                          button.btn.btn-danger(type='button', ng-click='killprocess(proc.pid, proc.name)') Kill
+                  dir-pagination-controls(max-size='5', direction-links='true', boundary-links='true')
+                  |                             {% endraw %}
+      // /#wrapper
+      script(type='text/javascript', src=url_for('static', filename='js/controller.js'))
+
