@@ -25,7 +25,7 @@ Server run on port 5000
 ##URLS:
 
 | Method        | URL           | Info  |
-| ------------- |:-------------:| -----:|
+| ------------- |:------------------:| -----:|
 | GET           | /             | Main Page/Dashboard|
 | GET           | /cpus         | cpu per core JSON |
 | GET           | /memory       | memory usage JSON |
