@@ -1,6 +1,8 @@
 # system_info_project
 Simple web system information application. Just for fun. 
+
 Live data about system on web ;)
+
 Flask-restful for REST API, AngularJS for frontend.
 
 ## Dependences
