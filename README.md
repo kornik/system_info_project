@@ -16,7 +16,7 @@ Flask-restful for REST API, AngularJS for frontend.
 
 
 
-##Usage:
+## Usage:
 
 Simple run:
 
@@ -24,7 +24,7 @@ python api.py
 
 Server run on port 5000
 
-##URLS:
+## URLS:
 
 | Method        | URL              | Info  |
 | ------------- |:------------------:| -----:|
